@@ -25,15 +25,15 @@ contract Ownable {
     /**
         * @dev Initializes the contract setting the deployer as the initial owner.
         */
-    constructor(address owner_) internal {
-        _owner = owner_;
+    constructor() internal {
+        _owner = msg.sender;
     }
 
     /**
          * @dev Throws if called by any account other than the owner.
          */
     modifier onlyOwner(){
-        require(msg.sender==_owner, "caller is not owner");
+        require(msg.sender == _owner, "caller is not owner");
         _;
     }
 
@@ -44,12 +44,19 @@ contract Ownable {
     function transferOwnership(address newOwner) public onlyOwner {
         // TODO add functionality to transfer control of the contract to a newOwner.
         // make sure the new owner is a real address
-        require(newOwner!=address(0) && newOwner!=_owner,"Invalid address");
+        require(newOwner != address(0) && newOwner != _owner,"Invalid address");
 
         address oldOwner = _owner;
         _owner = newOwner;
 
         emit ownershipTransferred(oldOwner, newOwner);
+    }
+
+    /**
+         * @dev returns the contract owner
+         */
+    function owner() public view returns(address){
+        return _owner;
     }
 }
 
@@ -83,7 +90,7 @@ contract Pausable is Ownable{
     /**
      * @dev Returns true if the contract is paused, and false otherwise.
      */
-    function paused() public view virtual returns (bool) {
+    function paused() public view returns (bool) {
         return _paused;
     }
 
@@ -118,7 +125,7 @@ contract Pausable is Ownable{
      *
      * - The contract must not be paused.
      */
-    function _pause() internal virtual whenNotPaused onlyOwner {
+    function _pause() internal whenNotPaused onlyOwner {
         _paused = true;
         emit Paused(msg.sender);
     }
@@ -130,7 +137,7 @@ contract Pausable is Ownable{
      *
      * - The contract must be paused.
      */
-    function _unpause() internal virtual whenPaused onlyOwner {
+    function _unpause() internal whenPaused onlyOwner {
         _paused = false;
         emit Unpaused(msg.sender);
     }
@@ -227,8 +234,8 @@ contract ERC721 is Pausable, ERC165 {
         require(_exists(tokenId),"Token doesn't exist.");
 
         // TODO require the given address to not be the owner of the tokenId
-        owner_ = ownerOf(tokenId);
-        require(to != owner_,"\'to\' address is current owner");
+        address owner = ownerOf(tokenId);
+        require(to != owner,"\'to\' address is current owner");
 
         // TODO require the msg sender to be the owner of the contract or isApprovedForAll() to be true
         require(_isApprovedOrOwner(msg.sender, tokenId), "Caller isn't owner or approved.");
@@ -237,7 +244,7 @@ contract ERC721 is Pausable, ERC165 {
         _tokenApprovals[tokenId] = to;
 
         // TODO emit Approval Event
-        emit Approval(owner_, to, tokenId);
+        emit Approval(owner, to, tokenId);
     }
 
     function getApproved(uint256 tokenId) public view returns (address) {
@@ -319,7 +326,7 @@ contract ERC721 is Pausable, ERC165 {
         _ownedTokensCount[to].increment();
 
         // TODO emit Transfer event
-        Transfer(address(0), to, tokenId);
+        emit Transfer(address(0), to, tokenId);
     }
 
     // @dev Internal function to transfer ownership of a given token ID to another address.
@@ -327,7 +334,7 @@ contract ERC721 is Pausable, ERC165 {
     function _transferFrom(address from, address to, uint256 tokenId) whenNotPaused internal {
 
         // TODO: require from address is the owner of the given token
-        require(_tokenOwner[tokenId] == from, "\`from\` address is not token owner.");
+        require(_tokenOwner[tokenId] == from, "\'from\' address is not token owner.");
 
         // TODO: require token is being transferred to valid address
         require(to != address(0), "\'to\' address is invalid.");
@@ -595,9 +602,9 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // TIP #2: you can also use uint2str() to convert a uint to a string
     // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
     // require the token exists before setting
-    function setTokenURI(uint256 tokenId){
+    function setTokenURI(uint256 tokenId) public{
         require(_exists(tokenId));
-        _tokenURIs[tokenId] = strConcat(baseTokenURI(), uint2str(tokenId));
+        _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
 }
 
@@ -610,10 +617,15 @@ contract EarthX is ERC721Metadata{
     //      -takes in a 'to' address, tokenId, and tokenURI as parameters
     //      -returns a true boolean upon completion of the function
     //      -calls the superclass mint and setTokenURI functions
-    constructor() ERC721Metadata("EarthX", "eX", "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/"){
+
+    // 0xaf3bcd69 === bytes4(keccak256('mint()'))
+    bytes4 private constant _INTERFACE_ID_EARTH_X = 0xaf3bcd69;
+
+    constructor() ERC721Metadata("EarthX", "eX", "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") public{
+        _registerInterface(_INTERFACE_ID_EARTH_X);
     }
 
-    function mint(address to, uint256 tokenId, string tokenURI) onlyOwner public returns(bool){
+    function mint(address to, uint256 tokenId) onlyOwner public returns(bool){
         super._mint(to, tokenId);
 
         super.setTokenURI(tokenId);
