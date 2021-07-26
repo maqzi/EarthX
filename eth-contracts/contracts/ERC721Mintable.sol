@@ -602,7 +602,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // TIP #2: you can also use uint2str() to convert a uint to a string
     // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
     // require the token exists before setting
-    function setTokenURI(uint256 tokenId) public{
+    function setTokenURI(uint256 tokenId) internal{
         require(_exists(tokenId));
         _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
@@ -625,7 +625,7 @@ contract EarthX is ERC721Metadata{
         _registerInterface(_INTERFACE_ID_EARTH_X);
     }
 
-    function mint(address to, uint256 tokenId) onlyOwner public returns(bool){
+    function mint(address to, uint256 tokenId) onlyOwner whenNotPaused public returns(bool){
         super._mint(to, tokenId);
 
         super.setTokenURI(tokenId);

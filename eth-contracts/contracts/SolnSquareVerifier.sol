@@ -27,7 +27,6 @@ contract SolnSquareVerifier is EarthX{
     constructor(
         address verifierAddress
     )
-    EarthX()
     public
     {
         verifier = SQVerifier(verifierAddress);
@@ -96,7 +95,8 @@ contract SolnSquareVerifier is EarthX{
         uint[2][2] memory b,
         uint[2] memory c,
         uint[2] memory input,
-        address to
+        address to,
+        uint256 tokenId
     )
     public
     returns(bool){
@@ -109,9 +109,10 @@ contract SolnSquareVerifier is EarthX{
         require(msg.sender == uniqueSolutions[hash].add, "only the solution address can mint it.");
         require(!uniqueSolutions[hash].minted, "token already minted!");
         uniqueSolutions[hash].minted = true;
+        solutions[uniqueSolutions[hash].index].minted = true;
 
         // parent contract handles metadata and token supply
-        return super.mint(to, solutions.length - 1);
+        return super.mint(to, tokenId);
     }
 
 }
