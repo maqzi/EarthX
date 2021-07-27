@@ -1,0 +1,25 @@
+{
+  "name": "earthx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "lite-server",
+    "test": "truffle test ./test/TestERC721Mintable.js ./test/TestSolnSquareVerifier.js ./test/TestSquareVerifier.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "web3": "1.4.0",
+    "lite-server": "2.4.0",
+    "zokrates-js-node": "1.0.21",
+    "@truffle/contract": "4.3.26",
+    "truffle-hdwallet-provider": "1.0.17"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "^2.2.0",
+    "solc": "^0.5.2",
+    "solc-js": "^0.5.2"
+  }
+}
