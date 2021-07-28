@@ -102,7 +102,7 @@ Summary
 
 ```
 ### Contract ABI
-ABIs can be found in the built contracts available here: https://github.com/maqzi/EarthX/blob/master/eth-contracts/build/contracts/SolnSquareVerifier.json
+ABIs can be found in the built contracts. The SolnSquareVerifier contract that is already deployed on the Rinkeby network can be found here: https://github.com/maqzi/EarthX/blob/master/eth-contracts/build/contracts/SolnSquareVerifier.json
 
 ## Testing
 The project has been built using truffle and can be tested easily with the following process:
