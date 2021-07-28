@@ -101,6 +101,9 @@ Summary
 > Final cost:          0.004934078039472624 ETH
 
 ```
+### Contract ABI
+ABIs can be found in the built contracts available here: https://github.com/maqzi/EarthX/blob/master/eth-contracts/build/contracts/SolnSquareVerifier.json
+
 ## Testing
 The project has been built using truffle and can be tested easily with the following process:
 
