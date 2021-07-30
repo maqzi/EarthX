@@ -62,7 +62,7 @@ The project has been built using truffle and can be tested easily with the follo
 The test cases should all pass. Other ways to test the tokens are mentioned below.
 
 ### Mint script
-The mint10.js script in `eth-contracts/` has nodejs functions to mint tokens as the contract owner. Make sure to update the keys and contract addresses at the top of the script.
+The mint10.js script in `eth-contracts/` has nodejs functions to mint tokens as the contract owner. Make sure to update the keys and contract addresses at the top of the script. This script can be used to communicate with the contract in absence of a Dapp.
 
 ### 10 initial tokens
 The contract's tokens can be seen on [etherscan](https://rinkeby.etherscan.io/token/0xe4afb5a33d1fa7978fc4a62112224f38c835a46b) along with other information on minting, holders and token transfers.
