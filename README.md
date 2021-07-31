@@ -70,6 +70,8 @@ The contract's tokens can be seen on [etherscan](https://rinkeby.etherscan.io/to
 ### Opensea storefront
 The storefront is located on [testnet opensea](https://testnets.opensea.io/collection/earthx-v3) which can be used to interact with the tokens.
 
+## Zk-SNARKs
+A Zero Knowledge - Succint Non-interactive ARguments of Knowledge or ZK-SNARK is used to verify ownership of a particular asset it the real world before onboarding it into the blockchain as a EarthX token. For the sake of this experiment, the proof is made available in the zokrates/code/ directory
 
 ## Resources
 
